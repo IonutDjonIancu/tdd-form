@@ -60,9 +60,9 @@ test('user should be able to input email, password and confirm password', () => 
 test('form should show error message on invalid email', () => {
   render(<App />);
 
-  const emailErrorElementNotFound = screen.queryByText(/the email you provided is not valid/i);
-  expect(emailErrorElementNotFound).toBeNull(); 
-  expect(emailErrorElementNotFound).not.toBeInTheDocument(); 
+  const emailErrorElementAtRender = screen.queryByText(/the email you provided is not valid/i);
+  expect(emailErrorElementAtRender).toBeNull(); 
+  expect(emailErrorElementAtRender).not.toBeInTheDocument(); 
 
   const emailInputElement = screen.getByRole('textbox', {
     name: /email/i
@@ -79,3 +79,23 @@ test('form should show error message on invalid email', () => {
 
 });
 
+test('form should show error message on invalid password', () => {
+  render(<App />);
+
+  const passwordErrorElementAtRender = screen.queryByText(/password is empty/i);
+  expect(passwordErrorElementAtRender).toBeNull();
+
+  const emailInputElement = screen.getByRole('textbox', {
+    name: /email/i
+  })
+  userEvent.type(emailInputElement, 'testemail@gmail.com');
+
+  const submitBtnElement = screen.getByRole('button', {
+    name: /submit/i
+  });
+  userEvent.click(submitBtnElement);
+
+  const passwordErrorElement = screen.getByText(/password is empty/i);
+  expect(passwordErrorElement).toBeInTheDocument();
+
+});

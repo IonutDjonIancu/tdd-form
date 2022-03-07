@@ -25,7 +25,11 @@ function App() {
 
     if(!Validator.isEmail(input.email)) {
       setError('The email you provided is not valid!');
+    } else if(Validator.isEmpty(input.password)) {
+      setError('Password is empty!');
     }
+
+
   }
 
   return (
