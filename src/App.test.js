@@ -99,3 +99,33 @@ test('form should show error message on invalid password', () => {
   expect(passwordErrorElement).toBeInTheDocument();
 
 });
+
+test('passwords should match', () => {
+  render(<App />);
+
+  const passwordErrorElementAtRender = screen.queryByText(/password is empty/i);
+  expect(passwordErrorElementAtRender).toBeNull();
+
+  const emailInputElement = screen.getByRole('textbox', {
+    name: /email/i
+  })
+  userEvent.type(emailInputElement, 'testemail@gmail.com');
+
+  const passwordElement = screen.getByLabelText('Password');
+  userEvent.type(passwordElement, '1234');
+  
+  const confirmPasswordElement = screen.getByLabelText('Confirm password');
+  userEvent.type(confirmPasswordElement, '1235');
+  
+  const submitBtnElement = screen.getByRole('button', {
+    name: /submit/i
+  });
+  userEvent.click(submitBtnElement);
+
+  const passwordErrorElement = screen.getByText(/passwords do not match/i);
+  expect(passwordErrorElement).toBeInTheDocument();
+
+});
+
+
+

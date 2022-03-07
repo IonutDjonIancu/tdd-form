@@ -13,7 +13,6 @@ function App() {
   const [error, setError] = React.useState('');
 
   function handleChange(e) {
-
     setInput({
       ...input,
       [e.target.name]: e.target.value
@@ -24,9 +23,11 @@ function App() {
     e.preventDefault(); // so that the submit html element does not send the data
 
     if(!Validator.isEmail(input.email)) {
-      setError('The email you provided is not valid!');
+      return setError('The email you provided is not valid!');
     } else if(Validator.isEmpty(input.password)) {
-      setError('Password is empty!');
+      return setError('Password is empty!');
+    } else if(!Validator.equals(input.password, input.confirmPassword)) {
+      return setError('Passwords do not match!');
     }
 
 
@@ -48,7 +49,7 @@ function App() {
               <input 
                 type='email'
                 id='email'
-                testid='email'
+                data-testid='email'
                 name='email'
                 className='form-control center-text'
                 value={input.email}
@@ -66,7 +67,7 @@ function App() {
               <input 
                 type='password'
                 id='password'
-                testid='password'
+                data-testid='password'
                 name='password'
                 className='form-control center-text'
                 value={input.password}
@@ -84,7 +85,7 @@ function App() {
               <input 
                 type='password'
                 id='confirm-password'
-                testid='confirm-password'
+                data-testid='confirm-password'
                 name='confirmPassword'
                 className='form-control center-text'
                 value={input.confirmPassword}
@@ -99,7 +100,7 @@ function App() {
                 className='btn btn-outline-light mb-3'
                 type='submit'
                 id='submitBtn'
-                testid='submitBtn'
+                data-testid='submitBtn'
                 name='submitBtn'
                 onClick={handleSubmit}
               >
