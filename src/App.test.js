@@ -127,5 +127,20 @@ test('passwords should match', () => {
 
 });
 
+test('testing the form`s happy path', () => {
+  render(<App />);
 
+  expect(screen.queryByTestId('error')).toBeNull();
+
+  
+
+
+
+
+
+
+
+
+
+});
 

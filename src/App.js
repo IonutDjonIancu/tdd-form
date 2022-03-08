@@ -93,7 +93,7 @@ function App() {
               />
             </div>
 
-            {error && <p className='text-danger'>{error}</p>}
+            {error && <p className='text-danger' data-testid='error'>{error}</p>}
 
             <div>  {/*submit button*/}
               <button
