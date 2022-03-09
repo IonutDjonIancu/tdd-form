@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
@@ -128,19 +128,31 @@ test('passwords should match', () => {
 });
 
 test('testing the form`s happy path', () => {
+
+  const userEmail = 'testme@gmail.com';
+  const userPass = '1234';
+
   render(<App />);
 
   expect(screen.queryByTestId('error')).toBeNull();
 
+  const emailInputElement = screen.getByRole('textbox', {
+    name: /email/i
+  });
+  expect(emailInputElement).toBeInTheDocument();
+  userEvent.type(emailInputElement, userEmail);
+  expect(emailInputElement.value).toBe(userEmail);
   
+  const passwordElement = screen.getByLabelText('Password');
+  expect(passwordElement).toBeInTheDocument();
+  userEvent.type(passwordElement, userPass);
+  expect(passwordElement.value).toBe(userPass);
 
-
-
-
-
-
-
-
-
+  const confirmPasswordElement = screen.getByLabelText('Confirm password');
+  expect(confirmPasswordElement).toBeInTheDocument();
+  userEvent.type(confirmPasswordElement, userPass);
+  expect(confirmPasswordElement.value).toBe(userPass);
+  
+  cleanup();
 });
 
