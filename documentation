@@ -1,0 +1,69 @@
+TDD in React																													
+	Set-up																												
+		Component testing done by: react-testing-library for React >= 17, or enzyme for React <= 16																											
+		Functionality testing done by: jest library.																											
+	RTL philosophy																												
+		Test the behavior, not the implementation.																											
+		Tests should be as similar to user experience as possible.																											
+	Priority in test driven development																												
+		1. High value features:																											
+			Like the main features of your app, i.e.: Amazon is created around browsing items and purchasing them.																										
+			Focus on the happy paths.																										
+		2. Edge cases in high value features:																											
+			Testing around the sad paths, i.e.: on an eshop you cannot purchase more than 100 items, test if the user tries to add 1000 items, is he able to do that or will he receive an error?																										
+		3. Things that easy to break:																											
+			Testing around features that depend on third-parties or they are prone to breaking from time to time.																										
+		4. Basic React component testing:																											
+			User interactions or events triggered by users.																										
+			Conditional rendering.																										
+			Utils / Hooks.																										
+	Three types of testing																												
+		Unit testing.																											
+		Integration testing.																											
+		End-to-end testing.																											
+	Example of a test template																												
+		Based on the react boiler plate App.test.js, the test is split into 3 parts.																											
+		Invoke the test() method which ships with jest, then:																											
+			Render the component you want to test, this will render the component and its children.																										
+			Find the element you want to test.																										
+			Assert the expected behaviour.																										
+components	Library imports																												
+		Imports required for component testing.																											
+	Example of TDD in action																												
+		First write the test for your component.							<- using single element getBy() method																				
+			getBy() method returns a single element and will throw if there are multiple elements of the same type found																										
+		Then write the component.																											
+	Password special field																												
+		Passwords can be grabbed by label.																											
+		This example shows how to grab a password by its label, it also uses a regular expression in case the label capitalization changes.																											
+			Remember to expect the element's value toBe().																										
+	Grabbing multiple elements of the same type																												
+		When several elements are of the same type, you need to you getAllBy(), it returns an array of the elements found, throws error if no elements are found.																										link	
+		Example of how to grab multiple elements of type password with a label password, which is checked via a regular expression.																											
+			Note that the regular expression checks if the word 'password' is present in the label text, in which case it returns true.																										
+			Again this is a test based on the user experience.																										
+																													
+user events	Grabbing elements using multiple conditions																												
+		You can also pass multiple conditions to the getBy() method in order to narrow down the search.																											
+	Library imports																												
+		Required for user-interaction.																											
+	User interaction events																												
+		Testing user interaction events for react components.																											
+	Querying for unrendered elements																												
+		You can also check if some elements are missing from the DOM, especially if they are rendered conditionally.																											
+	Two-way-biding																												
+		Two way biding is a method in a component that the component and its state change each other.																											
+		1 way biding:																											
+			This method is unidirectional where the state changes the component.																										
+				The state influences/changes the value of the email input field, this is one way binding.																									
+		2 way binding:																											
+			This method is bidirectional in the sense that the state influences the components, while changes in the components influence the state.																										
+	Validator library																												
+		Importing validator library to validate email field.									link																		
+	Testing user input email and submit click																												
+		Write the test.																											
+		Create an error hook.																											
+		Create a function for onClick.																											
+		Create the html element that has to resolve to truthy in order to appear in the DOM.																											
+			If the hook error resolves to true, the p tag appears.																										
+		Add the event on the button element.																											
