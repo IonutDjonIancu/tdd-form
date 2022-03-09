@@ -6,7 +6,9 @@ beforeEach(() => {
   render(<App />); 
 });
 
-afterEach(() => { cleanup(); });
+afterEach(() => { 
+  cleanup(); 
+});
 
 const typeIntoForm = ({ email, password, confirmPassword }) => {
 
@@ -39,6 +41,13 @@ const typeIntoForm = ({ email, password, confirmPassword }) => {
     passwordInputElement,
     confirmPasswordInputElement
   }
+}
+
+const btnClick = () => {
+  const submitBtnElement = screen.getByRole('button', {
+    name: /submit/i
+  })
+  userEvent.click(submitBtnElement);
 }
 
 test('input fields should render in form', () => {
@@ -85,19 +94,15 @@ test('user should be able to input email, password and confirm password', () => 
 });
 
 test('form should show error message on invalid email', () => {
+
   const emailErrorElementAtRender = screen.queryByText(/the email you provided is not valid/i);
   expect(emailErrorElementAtRender).toBeNull(); 
   expect(emailErrorElementAtRender).not.toBeInTheDocument(); 
-
-  const emailInputElement = screen.getByRole('textbox', {
-    name: /email/i
-  });
-  userEvent.type(emailInputElement, 'wrongemail.com');
   
-  const submitBtnElement = screen.getByRole('button', {
-    name: /submit/i
-  })
-  userEvent.click(submitBtnElement);
+  typeIntoForm({ 
+    email: 'wrongemail' 
+  });
+  btnClick();
 
   const emailErrorElement = screen.getByText(/the email you provided is not valid/i);
   expect(emailErrorElement).toBeInTheDocument();
@@ -107,15 +112,11 @@ test('form should show error message on invalid password', () => {
   const passwordErrorElementAtRender = screen.queryByText(/password is empty/i);
   expect(passwordErrorElementAtRender).toBeNull();
 
-  const emailInputElement = screen.getByRole('textbox', {
-    name: /email/i
-  })
-  userEvent.type(emailInputElement, 'testemail@gmail.com');
-
-  const submitBtnElement = screen.getByRole('button', {
-    name: /submit/i
+  typeIntoForm({ 
+    email: 'right@gmail.com', 
+    password: '' 
   });
-  userEvent.click(submitBtnElement);
+  btnClick();
 
   const passwordErrorElement = screen.getByText(/password is empty/i);
   expect(passwordErrorElement).toBeInTheDocument();
@@ -125,21 +126,12 @@ test('passwords should match', () => {
   const passwordErrorElementAtRender = screen.queryByText(/password is empty/i);
   expect(passwordErrorElementAtRender).toBeNull();
 
-  const emailInputElement = screen.getByRole('textbox', {
-    name: /email/i
-  })
-  userEvent.type(emailInputElement, 'testemail@gmail.com');
-
-  const passwordElement = screen.getByLabelText('Password');
-  userEvent.type(passwordElement, '1234');
-  
-  const confirmPasswordElement = screen.getByLabelText('Confirm password');
-  userEvent.type(confirmPasswordElement, '1235');
-  
-  const submitBtnElement = screen.getByRole('button', {
-    name: /submit/i
+  typeIntoForm({
+    email: 'right@gmail.com',
+    password: '1234',
+    confirmPassword: '1235'
   });
-  userEvent.click(submitBtnElement);
+  btnClick();
 
   const passwordErrorElement = screen.getByText(/passwords do not match/i);
   expect(passwordErrorElement).toBeInTheDocument();
@@ -151,23 +143,19 @@ test('testing the form`s happy path', () => {
 
   expect(screen.queryByTestId('error')).toBeNull();
 
-  const emailInputElement = screen.getByRole('textbox', {
-    name: /email/i
+  const {
+    emailInputElement,
+    passwordInputElement,
+    confirmPasswordInputElement
+  } = typeIntoForm({
+    email: userEmail,
+    password: userPass,
+    confirmPassword: userPass
   });
-  expect(emailInputElement).toBeInTheDocument();
-  userEvent.type(emailInputElement, userEmail);
-  expect(emailInputElement.value).toBe(userEmail);
-  
-  const passwordElement = screen.getByLabelText('Password');
-  expect(passwordElement).toBeInTheDocument();
-  userEvent.type(passwordElement, userPass);
-  expect(passwordElement.value).toBe(userPass);
 
-  const confirmPasswordElement = screen.getByLabelText('Confirm password');
-  expect(confirmPasswordElement).toBeInTheDocument();
-  userEvent.type(confirmPasswordElement, userPass);
-  expect(confirmPasswordElement.value).toBe(userPass);
-  
+  expect(emailInputElement.value).toBe(userEmail);
+  expect(passwordInputElement.value).toBe(userPass);
+  expect(confirmPasswordInputElement.value).toBe(userPass);
   expect(screen.queryByTestId('error')).toBeNull();
 });
 
