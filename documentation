@@ -134,3 +134,14 @@ Inside the callback
 
 assert the output of the method is as expected expect(mySum(2, 3)).toBe(5);
 
+
+
+------------------------------------------------ to sync ------------------------------------------------
+
+
+
+Describe block																								
+	Similar to the test() method's first argument, the describe block can group similar tests under one block of code.																							
+	The main functionality of the describe block is to offer the posibility to use the beforeEach(), as well as the other jest hooks inside the block.																							
+Running one test only																								
+	To run only one test with Jest, temporarily change that test command to a test.only.																							
