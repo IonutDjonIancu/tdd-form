@@ -20,6 +20,7 @@ test('input fields should render in form', () => {
     expect(e).toBeInTheDocument();
   })
   expect(submitBtnElement).toBeInTheDocument();
+  
 
 });
 
@@ -153,6 +154,8 @@ test('testing the form`s happy path', () => {
   userEvent.type(confirmPasswordElement, userPass);
   expect(confirmPasswordElement.value).toBe(userPass);
   
+  expect(screen.queryByTestId('error')).toBeNull();
+
   cleanup();
 });
 

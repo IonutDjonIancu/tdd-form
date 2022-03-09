@@ -7,12 +7,12 @@ TDD in React
 		Tests should be as similar to user experience as possible.																											
 	Priority in test driven development																												
 		1. High value features:																											
-			Like the main features of your app, i.e.: Amazon is created around browsing items and purchasing them.																										
+			Like the main features of your app, i.e.: Amazon is created around browsing items and purchasing them.											
 			Focus on the happy paths.																										
 		2. Edge cases in high value features:																											
 			Testing around the sad paths, i.e.: on an eshop you cannot purchase more than 100 items, test if the user tries to add 1000 items, is he able to do that or will he receive an error?																										
 		3. Things that easy to break:																											
-			Testing around features that depend on third-parties or they are prone to breaking from time to time.																										
+			Testing around features that depend on third-parties or they are prone to breaking from time to time.															
 		4. Basic React component testing:																											
 			User interactions or events triggered by users.																										
 			Conditional rendering.																										
