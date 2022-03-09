@@ -2,9 +2,46 @@ import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
-test('input fields should render in form', () => {
-  render(<App />);
+beforeEach(() => { 
+  render(<App />); 
+});
 
+afterEach(() => { cleanup(); });
+
+const typeIntoForm = ({ email, password, confirmPassword }) => {
+
+  let emailInputElement = '';
+  let passwordInputElement = '';
+  let confirmPasswordInputElement = '';
+
+  if(email) {
+    emailInputElement = screen.getByRole('textbox', {
+      name: /email/i
+    });
+
+    userEvent.type(emailInputElement, email);
+  }
+
+  if(password) {
+    passwordInputElement = screen.getByLabelText('Password');
+
+    userEvent.type(passwordInputElement, password);
+  }
+
+  if(confirmPassword) {
+    confirmPasswordInputElement = screen.getByLabelText('Confirm password');
+
+    userEvent.type(confirmPasswordInputElement, confirmPassword);
+  }
+
+  return {
+    emailInputElement,
+    passwordInputElement,
+    confirmPasswordInputElement
+  }
+}
+
+test('input fields should render in form', () => {
   const emailInputElement = screen.getByRole('textbox', {
     name: /email/i
   });
@@ -20,13 +57,9 @@ test('input fields should render in form', () => {
     expect(e).toBeInTheDocument();
   })
   expect(submitBtnElement).toBeInTheDocument();
-  
-
 });
 
 test('inputs should initially be empty', () => {
-  render(<App />);
-  
   const emailInputElement = screen.getByRole('textbox');
   const passFields = screen.getAllByLabelText(/password/i);
   // const passwordInputElement = screen.getByLabelText('Password');
@@ -36,31 +69,22 @@ test('inputs should initially be empty', () => {
   passFields.forEach(e => {
     expect(e.value).toBe('');
   });
-
 });
 
 test('user should be able to input email, password and confirm password', () => {
-  render(<App />);
-
-  const emailInputElement = screen.getByRole('textbox', {
-    name: /email/i
-  });
-  const passFields = screen.getAllByLabelText(/password/i, {
-    name: /password/i
+  
+  const { emailInputElement, passwordInputElement, confirmPasswordInputElement } = typeIntoForm({ 
+    email: 'test@gmail.com',
+    password: '1234',
+    confirmPassword: '1234'
   });
 
-  userEvent.type(emailInputElement, 'test@gmail.com');
   expect(emailInputElement.value).toBe('test@gmail.com');
-
-  passFields.forEach(e => {
-    userEvent.type(e, '1234');
-    expect(e.value).toBe('1234');
-  });
+  expect(passwordInputElement.value).toBe('1234');
+  expect(confirmPasswordInputElement.value).toBe('1234');
 });
 
 test('form should show error message on invalid email', () => {
-  render(<App />);
-
   const emailErrorElementAtRender = screen.queryByText(/the email you provided is not valid/i);
   expect(emailErrorElementAtRender).toBeNull(); 
   expect(emailErrorElementAtRender).not.toBeInTheDocument(); 
@@ -77,12 +101,9 @@ test('form should show error message on invalid email', () => {
 
   const emailErrorElement = screen.getByText(/the email you provided is not valid/i);
   expect(emailErrorElement).toBeInTheDocument();
-
 });
 
 test('form should show error message on invalid password', () => {
-  render(<App />);
-
   const passwordErrorElementAtRender = screen.queryByText(/password is empty/i);
   expect(passwordErrorElementAtRender).toBeNull();
 
@@ -98,12 +119,9 @@ test('form should show error message on invalid password', () => {
 
   const passwordErrorElement = screen.getByText(/password is empty/i);
   expect(passwordErrorElement).toBeInTheDocument();
-
 });
 
 test('passwords should match', () => {
-  render(<App />);
-
   const passwordErrorElementAtRender = screen.queryByText(/password is empty/i);
   expect(passwordErrorElementAtRender).toBeNull();
 
@@ -125,15 +143,11 @@ test('passwords should match', () => {
 
   const passwordErrorElement = screen.getByText(/passwords do not match/i);
   expect(passwordErrorElement).toBeInTheDocument();
-
 });
 
 test('testing the form`s happy path', () => {
-
   const userEmail = 'testme@gmail.com';
   const userPass = '1234';
-
-  render(<App />);
 
   expect(screen.queryByTestId('error')).toBeNull();
 
@@ -155,7 +169,5 @@ test('testing the form`s happy path', () => {
   expect(confirmPasswordElement.value).toBe(userPass);
   
   expect(screen.queryByTestId('error')).toBeNull();
-
-  cleanup();
 });
 
